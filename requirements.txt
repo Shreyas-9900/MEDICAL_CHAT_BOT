@@ -14,4 +14,4 @@ pinecone==5.0.1
 langchain-pinecone
 
 gunicorn
--e .
+
