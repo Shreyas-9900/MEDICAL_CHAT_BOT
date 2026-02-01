@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medical Chatbot</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+            text-align: center;
+        }
+
+        #chatbox {
+            width: 60%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            height: 400px;
+            overflow-y: scroll;
+            border-radius: 10px;
+        }
+
+        input {
+            width: 50%;
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px;
+        }
+
+        .user {
+            text-align: right;
+            color: blue;
+        }
+
+        .bot {
+            text-align: left;
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>🩺 Medical Chatbot</h2>
+
+    <div id="chatbox"></div>
+
+    <br>
+
+    <input type="text" id="msg" placeholder="Ask something...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        function sendMessage() {
+            let msg = document.getElementById("msg").value;
+            if (msg === "") return;
+
+            let chatbox = document.getElementById("chatbox");
+
+            chatbox.innerHTML += "<p class='user'><b>You:</b> " + msg + "</p>";
+
+            fetch("/get", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "msg=" + msg
+            })
+            .then(response => response.json())
+            .then(data => {
+                chatbox.innerHTML += "<p class='bot'><b>Bot:</b> " + data.answer + "</p>";
+                chatbox.scrollTop = chatbox.scrollHeight;
+            });
+
+            document.getElementById("msg").value = "";
+        }
+    </script>
+
+</body>
+</html>
